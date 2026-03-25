@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>💌 Digital Love Letter | Anniversary Gift</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #ffdde1 0%, #ee9ca7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', 'Poppins', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            padding: 16px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .screen {
+            background: rgba(255, 248, 245, 0.98);
+            border-radius: 48px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 215, 215, 0.5);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ========= PASSCODE SCREEN ========= */
+        .passcode-wrapper {
+            padding: 32px 24px 40px;
+            text-align: center;
+        }
+
+        .passcode-header {
+            margin-bottom: 24px;
+        }
+
+        .passcode-header .emoji-icon {
+            font-size: 3.5rem;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .passcode-header h2 {
+            font-size: 1.6rem;
+            color: #c44569;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .code-display {
+            background: #fef0f3;
+            border-radius: 60px;
+            padding: 12px 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid #ffb7c5;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .code-digits {
+            font-size: 2rem;
+            letter-spacing: 12px;
+            font-weight: 700;
+            color: #c44569;
+            font-family: monospace;
+            background: transparent;
+            border: none;
+            text-align: center;
+            width: 100%;
+            outline: none;
+        }
+
+        .error-box {
+            background: #ffe0e7;
+            border-radius: 50px;
+            padding: 10px 16px;
+            margin: 12px auto;
+            width: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            animation: shakeAnim 0.4s ease;
+        }
+
+        .error-box span {
+            color: #c2185b;
+            font-weight: 500;
+        }
+
+        .gif-emote {
+            font-size: 1.6rem;
+            animation: bounce 0.5s infinite;
+        }
+
+        @keyframes shakeAnim {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .hidden-element {
+            display: none;
+        }
+
+        .keypad {
+            margin-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .keypad-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .key {
+            background: white;
+            width: 75px;
+            height: 75px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #c44569;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 1px solid #ffccd5;
+            user-select: none;
+        }
+
+        .key:active {
+            transform: scale(0.94);
+            background: #ffe4ec;
+        }
+
+        .key.special {
+            background: #ffb7c5;
+            color: white;
+        }
+
+        .key.del {
+            background: #ffe0e7;
+            color: #c44569;
+        }
+
+        @media (max-width: 480px) {
+            .key { width: 65px; height: 65px; font-size: 1.8rem; }
+            .code-digits { font-size: 1.6rem; letter-spacing: 8px; }
+            .keypad-row { gap: 15px; }
+        }
+
+        /* ========= MAIN DASHBOARD - VERTICAL LAYOUT ========= */
+        .dashboard {
+            background: #fffaf5;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .simple-header {
+            padding: 32px 20px 16px;
+            text-align: center;
+        }
+
+        .simple-header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c44569, #e88ba3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .simple-header .sub-message {
+            color: #b5838a;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        /* VERTICAL BUTTONS STACK */
+        .vertical-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            padding: 20px 28px 24px;
+            flex: 1;
+        }
+
+        .nav-btn-vertical {
+            background: white;
+            border: none;
+            width: 100%;
+            padding: 20px 18px;
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(196, 69, 105, 0.12);
+            border: 1px solid #ffe2ea;
+        }
+
+        .nav-btn-vertical:active {
+            transform: scale(0.98);
+            background: #fff5f8;
+        }
+
+        .nav-icon-large {
+            font-size: 2.8rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .nav-text-group {
+            text-align: left;
+            flex: 1;
+        }
+
+        .nav-label-large {
+            font-weight: 700;
+            color: #c44569;
+            font-size: 1.2rem;
+            letter-spacing: -0.3px;
+        }
+
+        .nav-role-large {
+            font-size: 0.75rem;
+            color: #b5838a;
+            margin-top: 4px;
+        }
+
+        .nav-arrow {
+            font-size: 1.5rem;
+            color: #ffb7c5;
+        }
+
+        /* ========= PAGE CONTAINER (SEPARATE PAGES) ========= */
+        .page-container {
+            background: #fffaf5;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 16px 8px;
+            gap: 12px;
+            border-bottom: 2px solid #ffe0e7;
+            margin-bottom: 8px;
+        }
+
+        .back-button {
+            background: #fce4ec;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 30px;
+            font-size: 1.6rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            color: #c44569;
+        }
+
+        .back-button:active {
+            background: #ffccd5;
+            transform: scale(0.94);
+        }
+
+        .page-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #c44569;
+            flex: 1;
+        }
+
+        .page-content {
+            padding: 8px 20px 32px;
+            flex: 1;
+            overflow-y: auto;
+            max-height: 65vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ========= DIRECT LOVE LETTER STYLES (NO ENVELOPE) ========= */
+        .direct-letter {
+            background: linear-gradient(145deg, #fffef7 0%, #fff9f0 100%);
+            border-radius: 48px;
+            box-shadow: 0 20px 35px rgba(196, 69, 105, 0.2), 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 28px 24px;
+            margin: 20px 0 30px;
+            border: 1px solid #ffe2ea;
+            position: relative;
+            transition: all 0.3s ease;
+            animation: fadeSlideUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .direct-letter::before {
+            content: "❤️";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            background: #fffaf5;
+            padding: 0 12px;
+            border-radius: 50px;
+            color: #c44569;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .letter-content {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #4a2c38;
+        }
+
+        .letter-content h4 {
+            color: #c44569;
+            margin-bottom: 18px;
+            font-size: 1.3rem;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .letter-content p {
+            margin-bottom: 14px;
+        }
+
+        .letter-content .signature {
+            margin-top: 20px;
+            text-align: right;
+            font-style: italic;
+            color: #c44569;
+            font-weight: 500;
+            border-top: 1px dashed #ffccd5;
+            padding-top: 16px;
+        }
+
+        .letter-footer-emoji {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            letter-spacing: 6px;
+        }
+
+        .romantic-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #b5838a;
+            background: #fff0f3;
+            display: inline-block;
+            width: auto;
+            margin: 10px auto 0;
+            padding: 8px 20px;
+            border-radius: 40px;
+        }
+
+        @media (max-width: 480px) {
+            .direct-letter {
+                padding: 22px 18px;
+                margin: 15px 0 25px;
+            }
+            .letter-content {
+                font-size: 0.85rem;
+                line-height: 1.6;
+            }
+            .letter-content h4 {
+                font-size: 1.2rem;
+            }
+            .page-content {
+                padding: 8px 16px 24px;
+            }
+        }
+
+        /* Music Page */
+        .music-section h3 {
+            color: #c44569;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+        }
+
+        .song-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .song-card {
+            background: white;
+            border-radius: 60px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #ffe0e7;
+        }
+
+        .song-emoji {
+            font-size: 2rem;
+        }
+
+        .song-details {
+            flex: 1;
+        }
+
+        .song-title {
+            font-weight: bold;
+            color: #c44569;
+            font-size: 1rem;
+        }
+
+        .song-artist {
+            font-size: 0.75rem;
+            color: #a56b7c;
+        }
+
+        .play-btn {
+            background: #fce4ec;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #c44569;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .play-btn:active {
+            background: #ffccd5;
+        }
+
+        /* Gallery Page */
+        .gallery-section h3 {
+            color: #c44569;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 14px;
+        }
+
+        .gallery-card {
+            background: #fff0f3;
+            border-radius: 24px;
+            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            position: relative;
+        }
+
+        .gallery-card:active {
+            transform: scale(0.97);
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(196, 69, 105, 0.85);
+            color: white;
+            font-size: 0.65rem;
+            padding: 6px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: 0.2s;
+        }
+
+        .gallery-card:hover .gallery-caption {
+            transform: translateY(0);
+        }
+
+        .simple-footer {
+            text-align: center;
+            font-size: 0.7rem;
+            padding: 16px 20px 24px;
+            color: #cb7a9a;
+            border-top: 1px solid #ffe0e7;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <!-- PASSCODE SCREEN -->
+    <div id="passcodeScreen" class="screen">
+        <div class="passcode-wrapper">
+            <div class="passcode-header">
+                <div class="emoji-icon">💌🔐</div>
+                <h2>Unlock your special gift</h2>
+                <p style="font-size:0.75rem; margin-top:4px;">Enter 4-digit code ❤️</p>
+            </div>
+            <div class="code-display">
+                <input type="text" id="codeInput" class="code-digits" readonly placeholder="____" maxlength="4" value="">
+            </div>
+            <div id="errorContainer" class="hidden-element">
+                <div class="error-box">
+                    <span>❌ Wrong passcode! Try again.</span>
+                    <div class="gif-emote">😭💔😫</div>
+                </div>
+            </div>
+            <div class="keypad">
+                <div class="keypad-row">
+                    <div class="key" data-digit="1">1</div>
+                    <div class="key" data-digit="2">2</div>
+                    <div class="key" data-digit="3">3</div>
+                </div>
+                <div class="keypad-row">
+                    <div class="key" data-digit="4">4</div>
+                    <div class="key" data-digit="5">5</div>
+                    <div class="key" data-digit="6">6</div>
+                </div>
+                <div class="keypad-row">
+                    <div class="key" data-digit="7">7</div>
+                    <div class="key" data-digit="8">8</div>
+                    <div class="key" data-digit="9">9</div>
+                </div>
+                <div class="keypad-row">
+                    <div class="key special del" data-action="delete">⌫</div>
+                    <div class="key" data-digit="0">0</div>
+                    <div class="key special" style="visibility: hidden;">✓</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD (Vertical navigation) -->
+    <div id="mainDashboard" class="screen hidden">
+        <div class="dashboard">
+            <div class="simple-header">
+                <h1>Happy Anniversary!</h1>
+                <p class="sub-message">Just enjoy the occasion 🎉</p>
+            </div>
+            <div class="vertical-nav">
+                <button class="nav-btn-vertical" data-section="message">
+                    <div class="nav-icon-large">💌</div>
+                    <div class="nav-text-group">
+                        <div class="nav-label-large">Message</div>
+                        <div class="nav-role-large">Love Letter</div>
+                    </div>
+                    <div class="nav-arrow">→</div>
+                </button>
+                <button class="nav-btn-vertical" data-section="music">
+                    <div class="nav-icon-large">🎵</div>
+                    <div class="nav-text-group">
+                        <div class="nav-label-large">Favorite Music</div>
+                        <div class="nav-role-large">Our Melody</div>
+                    </div>
+                    <div class="nav-arrow">→</div>
+                </button>
+                <button class="nav-btn-vertical" data-section="gallery">
+                    <div class="nav-icon-large">📸</div>
+                    <div class="nav-text-group">
+                        <div class="nav-label-large">Gallery</div>
+                        <div class="nav-role-large">Precious Memories</div>
+                    </div>
+                    <div class="nav-arrow">→</div>
+                </button>
+            </div>
+            <div class="simple-footer">
+                Forever yours, with all my heart ❤️
+            </div>
+        </div>
+    </div>
+
+    <!-- MESSAGE PAGE - ENVELOPE REMOVED, DIRECT LOVE LETTER -->
+    <div id="messagePage" class="screen hidden">
+        <div class="page-container">
+            <div class="page-header">
+                <button class="back-button" data-back="message">←</button>
+                <div class="page-title">💌 Love Letter</div>
+                <div style="width: 44px;"></div>
+            </div>
+            <div class="page-content">
+                <div class="direct-letter">
+                    <div class="letter-content">
+                        <h4>💖 My Dearest Love 💖</h4>
+                        <p>Happy Anniversary, my love! 🌹 From the moment our paths crossed, my world became infinitely brighter and more beautiful. You are not just my partner, but my greatest blessing, my safe harbor, and my endless inspiration.</p>
+                        <p>Every laugh we share, every gentle hug, every quiet moment with you feels like a precious gift wrapped in gold. Your smile lights up my darkest days, and your love gives me strength I never knew I had.</p>
+                        <p>With you, I've discovered what it truly means to be seen, to be cherished, and to love unconditionally. I promise to stand by your side through every season, to support your dreams, and to fill your life with the same joy you bring to mine — today, tomorrow, and for all the years ahead.</p>
+                        <p>Thank you for being unapologetically you. You make my heart whole, and I fall deeper in love with you more with each passing sunrise. ❤️</p>
+                        <div class="signature">
+                            <strong>Yours always and forever,<br>Your Soulmate 💕</strong>
+                        </div>
+                        <div class="letter-footer-emoji">
+                            💖🌹💖
+                        </div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center;">
+                    <div class="romantic-note">
+                        ✨ Forever begins with us ✨
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="musicPage" class="screen hidden">
+        <div class="page-container">
+            <div class="page-header">
+                <button class="back-button" data-back="music">←</button>
+                <div class="page-title">🎵 Our Melody</div>
+                <div style="width: 44px;"></div>
+            </div>
+            <div class="page-content" id="musicPageContent"></div>
+        </div>
+    </div>
+
+    <div id="galleryPage" class="screen hidden">
+        <div class="page-container">
+            <div class="page-header">
+                <button class="back-button" data-back="gallery">←</button>
+                <div class="page-title">📸 Precious Memories</div>
+                <div style="width: 44px;"></div>
+            </div>
+            <div class="page-content" id="galleryPageContent"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // PASSCODE LOGIC
+    const CORRECT_CODE = "1999";
+    let currentCode = "";
+    const codeInputField = document.getElementById("codeInput");
+    const errorContainer = document.getElementById("errorContainer");
+    const passcodeScreen = document.getElementById("passcodeScreen");
+    const mainDashboard = document.getElementById("mainDashboard");
+    let isProcessing = false;
+
+    const messagePage = document.getElementById("messagePage");
+    const musicPage = document.getElementById("musicPage");
+    const galleryPage = document.getElementById("galleryPage");
+    let currentAudio = null;
+    let currentlyPlayingIndex = null;
+
+    function stopAudio() {
+        if (currentAudio) {
+            currentAudio.pause();
+            currentAudio.currentTime = 0;
+            currentAudio = null;
+        }
+        currentlyPlayingIndex = null;
+    }
+
+    function updateCodeDisplay() {
+        let displayValue = currentCode.padEnd(4, " ").slice(0, 4);
+        codeInputField.value = displayValue;
+    }
+
+    function showWrongError() {
+        if (isProcessing) return;
+        isProcessing = true;
+        errorContainer.classList.remove("hidden-element");
+        const displayDiv = document.querySelector(".code-display");
+        displayDiv.style.animation = "shakeAnim 0.4s ease";
+        setTimeout(() => { displayDiv.style.animation = ""; }, 400);
+        setTimeout(() => {
+            errorContainer.classList.add("hidden-element");
+            isProcessing = false;
+        }, 1800);
+        currentCode = "";
+        updateCodeDisplay();
+    }
+
+    function autoSubmitIfComplete() {
+        if (currentCode.length === 4 && !isProcessing) {
+            if (currentCode === CORRECT_CODE) {
+                passcodeScreen.classList.add("hidden");
+                mainDashboard.classList.remove("hidden");
+                errorContainer.classList.add("hidden-element");
+                isProcessing = false;
+                currentCode = "";
+                messagePage.classList.add("hidden");
+                musicPage.classList.add("hidden");
+                galleryPage.classList.add("hidden");
+            } else {
+                showWrongError();
+            }
+        }
+    }
+
+    function addDigit(digit) {
+        if (currentCode.length < 4 && !isProcessing) {
+            currentCode += digit;
+            updateCodeDisplay();
+            autoSubmitIfComplete();
+        }
+    }
+
+    function deleteDigit() {
+        if (!isProcessing && currentCode.length > 0) {
+            currentCode = currentCode.slice(0, -1);
+            updateCodeDisplay();
+            errorContainer.classList.add("hidden-element");
+        }
+    }
+
+    // MUSIC DATA
+    const playlist = [
+        { title: "Perfect", artist: "Ed Sheeran", emoji: "🎸", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+        { title: "Can't Help Falling in Love", artist: "Elvis Presley", emoji: "🎤", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+        { title: "All of Me", artist: "John Legend", emoji: "🎹", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" }
+    ];
+
+    function playSong(index) {
+        stopAudio();
+        const song = playlist[index];
+        const audio = new Audio(song.src);
+        currentAudio = audio;
+        currentlyPlayingIndex = index;
+        audio.play().catch(e => console.log("Autoplay blocked"));
+        renderMusicPageContent();
+    }
+
+    function renderMusicPageContent() {
+        const container = document.getElementById("musicPageContent");
+        if (!container) return;
+        let musicHtml = `<div class="music-section"><h3>🎶 Our Favorite Melodies 🎶</h3><div class="song-list">`;
+        playlist.forEach((song, idx) => {
+            const isPlaying = (currentlyPlayingIndex === idx && currentAudio && !currentAudio.paused);
+            musicHtml += `
+                <div class="song-card">
+                    <div class="song-emoji">${song.emoji}</div>
+                    <div class="song-details">
+                        <div class="song-title">${song.title} ${isPlaying ? ' ▶️' : ''}</div>
+                        <div class="song-artist">${song.artist}</div>
+                    </div>
+                    <div class="play-btn" data-play="${idx}">${isPlaying ? '⏸ Pause' : '🎵 Play'}</div>
+                </div>`;
+        });
+        musicHtml += `</div><p style="font-size:0.7rem; text-align:center; margin-top:22px;">💖 These songs remind me of us 💖</p></div>`;
+        container.innerHTML = musicHtml;
+        
+        document.querySelectorAll('#musicPageContent .play-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const idx = parseInt(btn.getAttribute('data-play'));
+                if (currentAudio && currentlyPlayingIndex === idx && !currentAudio.paused) {
+                    currentAudio.pause();
+                    currentlyPlayingIndex = null;
+                    renderMusicPageContent();
+                } else {
+                    playSong(idx);
+                }
+            });
+        });
+    }
+
+    // GALLERY
+    const galleryImages = [
+        { url: "https://picsum.photos/id/20/300/300", caption: "Romantic Sunset 💕" },
+        { url: "https://picsum.photos/id/42/300/300", caption: "Love & Laughter 😊" },
+        { url: "https://picsum.photos/id/44/300/300", caption: "Forever Together 🌹" },
+        { url: "https://picsum.photos/id/58/300/300", caption: "Sweet Moments 💑" },
+        { url: "https://picsum.photos/id/60/300/300", caption: "Holding Hands 🤝" },
+        { url: "https://picsum.photos/id/64/300/300", caption: "Endless Love ❤️" }
+    ];
+
+    function openLightbox(imgSrc, caption) {
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.backgroundColor = 'rgba(0,0,0,0.9)';
+        overlay.style.display = 'flex';
+        overlay.style.flexDirection = 'column';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = '10000';
+        overlay.style.cursor = 'pointer';
+        const imgElem = document.createElement('img');
+        imgElem.src = imgSrc;
+        imgElem.style.maxWidth = '90%';
+        imgElem.style.maxHeight = '80%';
+        imgElem.style.borderRadius = '28px';
+        imgElem.style.boxShadow = '0 0 0 4px #ffb7c5, 0 20px 35px black';
+        const cap = document.createElement('div');
+        cap.innerText = caption;
+        cap.style.color = 'white';
+        cap.style.backgroundColor = '#c44569cc';
+        cap.style.padding = '8px 20px';
+        cap.style.borderRadius = '60px';
+        cap.style.marginTop = '20px';
+        overlay.appendChild(imgElem);
+        overlay.appendChild(cap);
+        overlay.addEventListener('click', () => overlay.remove());
+        document.body.appendChild(overlay);
+    }
+
+    function renderGalleryPageContent() {
+        const container = document.getElementById("galleryPageContent");
+        if (!container) return;
+        let galleryHtml = `<div class="gallery-section"><h3>📸 Our Beautiful Moments</h3><div class="gallery-grid">`;
+        galleryImages.forEach((img, i) => {
+            galleryHtml += `
+                <div class="gallery-card" data-img="${img.url}" data-caption="${img.caption}">
+                    <img src="${img.url}" alt="moment ${i}" loading="lazy">
+                    <div class="gallery-caption">${img.caption}</div>
+                </div>`;
+        });
+        galleryHtml += `</div><p style="text-align:center; margin-top:20px; font-size:0.75rem;">✨ Tap any photo to see it bigger ✨</p></div>`;
+        container.innerHTML = galleryHtml;
+        
+        document.querySelectorAll('#galleryPageContent .gallery-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const imgUrl = card.getAttribute('data-img');
+                const caption = card.getAttribute('data-caption');
+                if (imgUrl) openLightbox(imgUrl, caption);
+            });
+        });
+    }
+
+    function showPage(pageId) {
+        mainDashboard.classList.add("hidden");
+        messagePage.classList.add("hidden");
+        musicPage.classList.add("hidden");
+        galleryPage.classList.add("hidden");
+        if (pageId !== 'musicPage') {
+            stopAudio();
+            currentlyPlayingIndex = null;
+        }
+        document.getElementById(pageId).classList.remove("hidden");
+        
+        if (pageId === 'musicPage') renderMusicPageContent();
+        else if (pageId === 'galleryPage') renderGalleryPageContent();
+        // messagePage no longer needs envelope listener - direct letter always visible
+    }
+
+    function goBackToDashboard() {
+        stopAudio();
+        currentlyPlayingIndex = null;
+        mainDashboard.classList.remove("hidden");
+        messagePage.classList.add("hidden");
+        musicPage.classList.add("hidden");
+        galleryPage.classList.add("hidden");
+    }
+
+    document.querySelectorAll('.nav-btn-vertical').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const section = btn.getAttribute('data-section');
+            if (section === 'message') showPage('messagePage');
+            else if (section === 'music') showPage('musicPage');
+            else if (section === 'gallery') showPage('galleryPage');
+        });
+    });
+
+    document.querySelectorAll('.back-button').forEach(btn => {
+        btn.addEventListener('click', () => goBackToDashboard());
+    });
+
+    document.querySelectorAll('.key[data-digit]').forEach(key => {
+        key.addEventListener('click', () => {
+            const digit = key.getAttribute('data-digit');
+            if (digit) addDigit(digit);
+        });
+    });
+    const delBtn = document.querySelector('[data-action="delete"]');
+    if (delBtn) delBtn.addEventListener('click', () => deleteDigit());
+    
+    document.addEventListener('keydown', (e) => {
+        if (!passcodeScreen.classList.contains('hidden')) {
+            if (e.key >= '0' && e.key <= '9') { addDigit(e.key); e.preventDefault(); }
+            else if (e.key === 'Backspace') { deleteDigit(); e.preventDefault(); }
+        }
+    });
+
+    function init() {
+        currentCode = "";
+        isProcessing = false;
+        updateCodeDisplay();
+        errorContainer.classList.add("hidden-element");
+        passcodeScreen.classList.remove("hidden");
+        mainDashboard.classList.add("hidden");
+        messagePage.classList.add("hidden");
+        musicPage.classList.add("hidden");
+        galleryPage.classList.add("hidden");
+        if (currentAudio) stopAudio();
+    }
+    init();
+</script>
+</body>
+</html>
